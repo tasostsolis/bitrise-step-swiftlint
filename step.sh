@@ -45,6 +45,8 @@ case $reporter in
 esac
 
 report_path="${BITRISE_DEPLOY_DIR}/${filename}"
+lint_status=0
+exit_status=0
 
 case $lint_range in 
   "changed")
@@ -56,12 +58,20 @@ case $lint_range in
     for swift_file in $(git diff HEAD^ --name-only -- '*.swift')
     do 
       swiftlint_output+=$"$(swiftlint lint --path "$swift_file" --reporter ${reporter} "${FLAGS}")"
+      lint_status=$?
+      if [ $lint_status -gt 0 ] ; then
+        exit_status=$lint_status
+      fi
     done
     ;;
   
   "all") 
     echo "Linting all files"
     swiftlint_output="$(swiftlint lint --reporter ${reporter} ${FLAGS})"
+    lint_status=$?
+    if [ $lint_status -gt 0 ] ; then
+      exit_status=$lint_status
+    fi
     ;;
 esac
 
@@ -76,3 +86,4 @@ echo "${swiftlint_output}" > $report_path
 envman add --key "SWIFTLINT_REPORT_PATH" --value "${report_path}"
 echo "Saved swiftlint output in file at path SWIFTLINT_REPORT_PATH"
  
+exit $exit_status
