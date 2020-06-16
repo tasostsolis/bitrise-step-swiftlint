@@ -104,6 +104,18 @@ inputs:
       value_options:
       - "yes"
       - "no"
+
+  - lenient: "no"
+    opts:
+      category: Config
+      description: |-
+          Downgrades serious violations to warnings, warning threshold is disabled
+      is_required: false
+      summary: ""
+      title: Use lenient mode
+      value_options:
+      - "yes"
+      - "no"
 outputs:
 - SWIFTLINT_REPORT: null
   opts:

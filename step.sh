@@ -22,6 +22,10 @@ if [ "${quiet}" = "yes" ] ; then
   FLAGS=$FLAGS' --quiet'  
 fi
 
+if [ "${lenient}" = "yes" ] ; then
+  echo "Running lenient mode"
+  FLAGS=$FLAGS' --lenient'
+fi
 
 cd "${linting_path}"
 
